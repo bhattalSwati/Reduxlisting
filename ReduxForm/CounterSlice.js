@@ -1,43 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit"
-
+import {createSlice} from '@reduxjs/toolkit';
 
 const formSlice = createSlice({
-  name: 'form',
+  name: 'user',
   initialState: {
     data: [],
   },
   reducers: {
-    increment: state => {
-      state.value += 1
+    addUser: (state, action) => {
+      state.data.push(action.payload);
     },
-    incrementByAmount: (state, action) => {
-      state.data.push(action.payload)
-    },
-    editData: (state, item) => {
-      const itemData = item.payload
-      const id = itemData.id
-      console.log("item id is", id)
-      for (let index = 0; index < state.data.length; index++) {
-        if(state.data[index].id === id) {
-          state.data[index] = itemData
-        }
-      }
-    },
-    
-    deleteData: (state, item) => {
-      const itemData = item.payload
-      const id = itemData.id
-      console.log("item id is", id)
-      for (let index = 0; index < state.data.length; index++) {
-        if(state.data[index].id === id) {
-          state.data.splice(index, 1)
-        }
-      } 
-    }
 
-  }
-})
+    updateUser: (state, action) => {
+      const indexToUpdate = state.data.findIndex(
+        user => user.id === action.payload.id,
+      );
+      state.data[indexToUpdate] = action.payload;
+    },
 
-export const { increment, decrement, incrementByAmount, editData, deleteData } = formSlice.actions
-const Reducer = formSlice.reducer
-export default Reducer;
+    deleteUser: (state, action) => {
+      const indexToUpdate = state.data.findIndex(
+        user => user.id === action.payload.id,
+      );
+      state.data.splice(indexToUpdate, 1);
+    },
+  },
+});
+
+export const {setUser, addUser, updateUser, deleteUser} = formSlice.actions;
+export const selectUser = state => state.user.data;
+export default formSlice.reducer;

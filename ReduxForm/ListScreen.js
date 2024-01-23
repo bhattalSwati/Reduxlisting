@@ -1,68 +1,58 @@
 import React from "react";
-import { Text, View ,FlatList} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, View ,FlatList,SafeAreaView} from "react-native";
 import { reduxStyle } from "./StyleForm";
 import FlatView from "./FlatListChildView";
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useSelector, useDispatch} from 'react-redux';
+import { selectUser,deleteUser } from "react-redux";
 
-const ItemList = [{
-    price: "$100",
-    change: "-31",
-    marketCap: 235278537,
-    id: 0
-  }, {
-    price: "$200",
-    change: "-91",
-    marketCap: 235278537,
-    id: 1
-  }, {
-    price: "$300",
-    change: "-14",
-    marketCap: 235278537,
-    id: 2
-  },
-  {
-    price: "$100",
-    change: "-43",
-    marketCap: 235278537,
-    id: 3
-  },
-  {
-    price: "$200",
-    change: "-81",
-    marketCap: 235278537,
-    id: 4
-  },
-  {
-    price: "$400",
-    change: "-23",
-    marketCap: 235278537,
-    id: 5
-  },
-  {
-    price: "$500",
-    change: "-12",
-    marketCap: 235278537,
-    id: 6
-  },
-  {
-    price: "$600",
-    change: "-8",
-    marketCap: 235278537,
-    id: 7
-  }]
-  
 
-export default function ShowlistView(){
+ function ShowlistView({navigation}) {
+
+  const dispatch = useDispatch();
+  const userData = useSelector(selectUser);
+
+  const showAlert = data => {
+    Alert.alert('Action', 'Choose action:', [
+      {
+        text: 'Edit',
+        onPress: () =>
+          navigation.navigate('FormScreen', {
+            data: data,
+            editMode: true,
+          }),
+      },
+      {
+        text: 'Delete',
+        onPress: () => {
+          dispatch(deleteUser(data));
+        },
+        style: 'destructive',
+      },
+    ]);
+  };
+
+  const editDataAction = editableData => {
+    console.log('Button Tapped', editableData);
+    showAlert(editableData);
+  };
+
     return(
     <SafeAreaView style={{flex: 1,backgroundColor: "blue"}}>
     <View style={{backgroundColor:"red", flex: 1}}>
         <FlatList
           style={{ marginRight: 10, top: 6 }}
           bounces={false}
-          data={ItemList}>
-          keyExtractor={item => item.id}
+          data={userData}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => (
+            <ShowUserItem user={item} onPressEdit={editDataAction} />
+          )}>
         </FlatList>
     </View>
     </SafeAreaView>
     )
-};
+}
+
+export default ShowlistView;
