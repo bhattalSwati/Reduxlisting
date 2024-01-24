@@ -4,13 +4,20 @@
 
 import {AppRegistry} from 'react-native';
 import InitialScreen from './ReduxForm/InitialScreen';
-//import UpdateDataScreen from './ReduxForm/UpdateDataScreen';
 import {name as appName} from './app.json';
-// import Store from './ReduxForm/Store';
-// import { Provider } from 'react-redux';
-// import { ReactDOM } from 'react';
+import InitialScreenData from './ReduxForm/InitialScreen';
+import store from './ReduxForm/Store';
+import { Provider } from 'react-redux';
 
-AppRegistry.registerComponent(appName, () => InitialScreen);
+const Redux = () => {
+   return (
+      <Provider store = {store}>
+        <InitialScreenData/>
+      </Provider>
+   )
+}
+
+AppRegistry.registerComponent(appName, () => Redux);
 
 // ReactDOM.render(
 //     <Provider store={Store}>

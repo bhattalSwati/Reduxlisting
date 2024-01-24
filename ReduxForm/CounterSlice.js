@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import { act } from 'react-test-renderer';
 
 const formSlice = createSlice({
   name: 'user',
@@ -7,6 +8,8 @@ const formSlice = createSlice({
   },
   reducers: {
     addUser: (state, action) => {
+      console.log('action is here',action)
+      console.log('count is',state.data.length)
       state.data.push(action.payload);
     },
 
@@ -26,6 +29,7 @@ const formSlice = createSlice({
   },
 });
 
-export const {setUser, addUser, updateUser, deleteUser} = formSlice.actions;
+export const {addUser, updateUser, deleteUser} = formSlice.actions;
 export const selectUser = state => state.user.data;
-export default formSlice.reducer;
+const Reducer = formSlice.reducer
+export default Reducer;
